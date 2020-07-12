@@ -71,3 +71,4 @@ if st.sidebar.checkbox("Simple linear regression" , False):
             plt.xlabel("independant variable")
             plt.ylabel("dependant variable")
             st.pyplot()
+            st.markdown("#### Correlation coefficients: `{}` ".format(np.corrcoef( df[independant_var] ,df[dependant_var] )[-1][0]))

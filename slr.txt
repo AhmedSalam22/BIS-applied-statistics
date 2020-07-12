@@ -4,7 +4,7 @@ Dep. Variable:                  price   R-squared:                       0.678
 Model:                            OLS   Adj. R-squared:                  0.678
 Method:                 Least Squares   F-statistic:                 1.269e+04
 Date:                Sun, 12 Jul 2020   Prob (F-statistic):               0.00
-Time:                        02:53:26   Log-Likelihood:                -84517.
+Time:                        03:06:56   Log-Likelihood:                -84517.
 No. Observations:                6028   AIC:                         1.690e+05
 Df Residuals:                    6026   BIC:                         1.691e+05
 Df Model:                           1                                         
