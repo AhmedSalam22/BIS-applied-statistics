@@ -15,6 +15,8 @@ def read_file(path):
     df = pd.read_csv(path)
     return df
 
+
+
 file_uploader = st.file_uploader("Please select your file" , "csv")
 if file_uploader != None:
     df = read_file(file_uploader)
@@ -57,8 +59,7 @@ if hypothesis_testing:
 if st.sidebar.checkbox("linear regression" , False):
     st.title("linear regression")
     if file_uploader != None:
-        independant_var = st.multiselect("Choose independant (x-axis , explanatory) variable " , list(df.columns))
-        dependant_var = st.selectbox("Choose dependant (y-axis , response) variable " , list(df.columns))
+
         if st.radio("Do you want to include the categorical variable into your consideration" , ["No" , "Yes"]) == "Yes":
             st.warning("""
             when you create dummy variables using 0, 1 encodings, you always need to drop one of the columns from the model to make sure your matrices are full rank (and that your solutions are reliable from Python).
@@ -71,9 +72,22 @@ The reason for this is linear algebra. Specifically, in order to invert matrices
            الذى يحتوى على هذه البيانات وبعدين هتختار الاساس اللى هتقارن عليه واحد منهم لو معملتش كده يبقى النتيجة مش شغالة
            الbase line ده 
            هيكون هو نفسه ال intercept
+            
+           
+            بالمختصر المفيد لازم تستبعد واحد من المتغيرات النصية  واللى  انت هتستبعده هو اللى انت  هتقارن على اساسه 
+           وده لكل عمود يحتوى على عدد من البيانات وليكن عمود الفرع يحتوى على الفرع ا و ب و س 
+           يبقى لازم نستبعد فرع فى المتغير المستقل والمتغير ده هو اللى بنقارن على اساسه وليكن س
+           طيب لو عندى عمود بيتحوى على بيانات مثل الشركة ا و ب وعاوزين نقارن بيهم هما كمان نفس الوضع لازم نستبعد واحد واللى هنستبعده هو اللى بنقارن على اساسه 
+
             """)
-            dummy_variables = ""
-        
+            dummy_variables = st.multiselect("Select your dummy variables" , list(df.columns))
+            if st.checkbox("Convert into dummy variable" , False):
+                df_new = pd.get_dummies(df[dummy_variables])
+                df = df.join(df_new)
+                st.success("Convert successfuly")
+        # st.write(df)
+        independant_var = st.multiselect("Choose independant (x-axis , explanatory) variable " , list(df.columns))
+        dependant_var = st.selectbox("Choose dependant (y-axis , response) variable " , list(df.columns))
         if st.button("Calculate"):
             with st.echo():
                 df["intercept"] = 1

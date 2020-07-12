@@ -1,29 +1,30 @@
                             OLS Regression Results                            
 ==============================================================================
-Dep. Variable:                  price   R-squared:                       0.678
-Model:                            OLS   Adj. R-squared:                  0.678
-Method:                 Least Squares   F-statistic:                     4230.
+Dep. Variable:                  price   R-squared:                       0.809
+Model:                            OLS   Adj. R-squared:                  0.809
+Method:                 Least Squares   F-statistic:                     4250.
 Date:                Sun, 12 Jul 2020   Prob (F-statistic):               0.00
-Time:                        16:08:06   Log-Likelihood:                -84517.
-No. Observations:                6028   AIC:                         1.690e+05
-Df Residuals:                    6024   BIC:                         1.691e+05
-Df Model:                           3                                         
+Time:                        22:20:09   Log-Likelihood:                -82944.
+No. Observations:                6028   AIC:                         1.659e+05
+Df Residuals:                    6021   BIC:                         1.659e+05
+Df Model:                           6                                         
 Covariance Type:            nonrobust                                         
+===================================================================================
+                      coef    std err          t      P>|t|      [0.025      0.975]
+-----------------------------------------------------------------------------------
+neighborhood_B   5.229e+05   7040.928     74.271      0.000    5.09e+05    5.37e+05
+neighborhood_C  -7168.6285   7639.254     -0.938      0.348   -2.21e+04    7807.045
+style_lodge      1.685e+05   9906.629     17.012      0.000    1.49e+05    1.88e+05
+style_victorian  7.056e+04   8337.790      8.463      0.000    5.42e+04    8.69e+04
+bedrooms         1.732e+05   7677.152     22.558      0.000    1.58e+05    1.88e+05
+bathrooms        9.996e+04   1.09e+04      9.164      0.000    7.86e+04    1.21e+05
+intercept       -3.833e+05    1.2e+04    -31.995      0.000   -4.07e+05    -3.6e+05
 ==============================================================================
-                 coef    std err          t      P>|t|      [0.025      0.975]
-------------------------------------------------------------------------------
-area         345.9110      7.227     47.863      0.000     331.743     360.079
-bedrooms   -2925.8063   1.03e+04     -0.285      0.775    -2.3e+04    1.72e+04
-bathrooms   7345.3917   1.43e+04      0.515      0.607   -2.06e+04    3.53e+04
-intercept   1.007e+04   1.04e+04      0.972      0.331   -1.02e+04    3.04e+04
-==============================================================================
-Omnibus:                      367.658   Durbin-Watson:                   2.007
-Prob(Omnibus):                  0.000   Jarque-Bera (JB):              350.116
-Skew:                           0.536   Prob(JB):                     9.40e-77
-Kurtosis:                       2.503   Cond. No.                     1.16e+04
+Omnibus:                      978.611   Durbin-Watson:                   1.993
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):             2926.472
+Skew:                           0.848   Prob(JB):                         0.00
+Kurtosis:                       5.962   Cond. No.                         25.9
 ==============================================================================
 
 Warnings:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
-[2] The condition number is large, 1.16e+04. This might indicate that there are
-strong multicollinearity or other numerical problems.
