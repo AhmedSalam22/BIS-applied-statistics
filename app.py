@@ -47,18 +47,37 @@ if hypothesis_testing:
                 $$H_0: \mu <= {x}$$
                 $$H_1: \mu > {x}$$
 
+                **option4**
+                        
+
+
             """.format(x=x))
 
 # Simple linear regression
-if st.sidebar.checkbox("Simple linear regression" , False):
-    st.title("Simple linear regression")
+if st.sidebar.checkbox("linear regression" , False):
+    st.title("linear regression")
     if file_uploader != None:
-        independant_var = st.selectbox("Choose independant (x-axis , explanatory) variable " , list(df.columns))
+        independant_var = st.multiselect("Choose independant (x-axis , explanatory) variable " , list(df.columns))
         dependant_var = st.selectbox("Choose dependant (y-axis , response) variable " , list(df.columns))
+        if st.radio("Do you want to include the categorical variable into your consideration" , ["No" , "Yes"]) == "Yes":
+            st.warning("""
+            when you create dummy variables using 0, 1 encodings, you always need to drop one of the columns from the model to make sure your matrices are full rank (and that your solutions are reliable from Python).
+
+The reason for this is linear algebra. Specifically, in order to invert matrices, a matrix must be full rank (that is, all the columns need to be linearly independent). Therefore, you need to drop one of the dummy columns, to create linearly independent columns (and a full rank matrix).
+            يعنى لو أنت عاوز تضع البيانات النصية فى عين الاعتبار ما تعمل اعمده من صفر ل واحد تمثل المتغير هيكون موجود ولا لاء
+            فى عمود هتحذفه اللى احنا هنقارن على اساسه لنفترض عندنا  بيانات مثل الشرق والغرب يبقى هنعمل عمودين كل عمود بيمثل وجود المتغير او لاء بقيمة صفر وواحد
+            بعد كده هنحذف عمود منهم اللى هو هنقارن على اساسة ..خلاصة القول ما تشغلش بالك بس حبيت اوضح الفكرة 
+           لما تيجى تضع البيانات النصية فى عين الاعتبار هتحدد الcolumn
+           الذى يحتوى على هذه البيانات وبعدين هتختار الاساس اللى هتقارن عليه واحد منهم لو معملتش كده يبقى النتيجة مش شغالة
+           الbase line ده 
+           هيكون هو نفسه ال intercept
+            """)
+            dummy_variables = ""
+        
         if st.button("Calculate"):
             with st.echo():
                 df["intercept"] = 1
-                result = sm.OLS(df[dependant_var] , df[["intercept" , independant_var]]).fit().summary()
+                result = sm.OLS(df[dependant_var] , df[independant_var + ["intercept"]]).fit().summary()
             with open("slr.txt" , "w+") as f:
                 f.write(str(result))
             f = open("slr.txt").read()
@@ -66,9 +85,11 @@ if st.sidebar.checkbox("Simple linear regression" , False):
             st.warning("Please add .txt at the end of the name when you save file otherwise it will not work")
             href = f'<a href="data:file/txt;base64,{b64}">Download result.txt File</a> (click and save as &lt;some_name&gt;.txt)'
             st.markdown(href, unsafe_allow_html=True)
-            st.header("scatter plot")
-            plt.scatter( x= df[independant_var] , y=df[dependant_var] )
-            plt.xlabel("independant variable")
-            plt.ylabel("dependant variable")
-            st.pyplot()
-            st.markdown("#### Correlation coefficients: `{}` ".format(np.corrcoef( df[independant_var] ,df[dependant_var] )[-1][0]))
+            if len(dependant_var) == len(independant_var):
+                st.header("scatter plot")
+                plt.scatter( x= df[independant_var] , y=df[dependant_var] )
+                plt.xlabel("independant variable")
+                plt.ylabel("dependant variable")
+                st.pyplot()
+                st.markdown("#### Correlation coefficients: `{}` ".format(np.corrcoef( df[independant_var] ,df[dependant_var] )[-1][0]))
+

@@ -2,26 +2,28 @@
 ==============================================================================
 Dep. Variable:                  price   R-squared:                       0.678
 Model:                            OLS   Adj. R-squared:                  0.678
-Method:                 Least Squares   F-statistic:                 1.269e+04
+Method:                 Least Squares   F-statistic:                     4230.
 Date:                Sun, 12 Jul 2020   Prob (F-statistic):               0.00
-Time:                        03:06:56   Log-Likelihood:                -84517.
+Time:                        16:08:06   Log-Likelihood:                -84517.
 No. Observations:                6028   AIC:                         1.690e+05
-Df Residuals:                    6026   BIC:                         1.691e+05
-Df Model:                           1                                         
+Df Residuals:                    6024   BIC:                         1.691e+05
+Df Model:                           3                                         
 Covariance Type:            nonrobust                                         
 ==============================================================================
                  coef    std err          t      P>|t|      [0.025      0.975]
 ------------------------------------------------------------------------------
-intercept   9587.8878   7637.479      1.255      0.209   -5384.303    2.46e+04
-area         348.4664      3.093    112.662      0.000     342.403     354.530
+area         345.9110      7.227     47.863      0.000     331.743     360.079
+bedrooms   -2925.8063   1.03e+04     -0.285      0.775    -2.3e+04    1.72e+04
+bathrooms   7345.3917   1.43e+04      0.515      0.607   -2.06e+04    3.53e+04
+intercept   1.007e+04   1.04e+04      0.972      0.331   -1.02e+04    3.04e+04
 ==============================================================================
-Omnibus:                      368.609   Durbin-Watson:                   2.007
-Prob(Omnibus):                  0.000   Jarque-Bera (JB):              349.279
-Skew:                           0.534   Prob(JB):                     1.43e-76
-Kurtosis:                       2.499   Cond. No.                     4.93e+03
+Omnibus:                      367.658   Durbin-Watson:                   2.007
+Prob(Omnibus):                  0.000   Jarque-Bera (JB):              350.116
+Skew:                           0.536   Prob(JB):                     9.40e-77
+Kurtosis:                       2.503   Cond. No.                     1.16e+04
 ==============================================================================
 
 Warnings:
 [1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
-[2] The condition number is large, 4.93e+03. This might indicate that there are
+[2] The condition number is large, 1.16e+04. This might indicate that there are
 strong multicollinearity or other numerical problems.
