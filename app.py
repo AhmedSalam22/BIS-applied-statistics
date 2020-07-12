@@ -4,6 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import statsmodels.api as sm
 import base64
+import seaborn as sns
 
 
 st.title("Applied Statistics")
@@ -55,8 +56,9 @@ if st.sidebar.checkbox("Simple linear regression" , False):
         independant_var = st.selectbox("Choose independant (x-axis , explanatory) variable " , list(df.columns))
         dependant_var = st.selectbox("Choose dependant (y-axis , response) variable " , list(df.columns))
         if st.button("Calculate"):
-            df["intercept"] = 1
-            result = sm.OLS(df[dependant_var] , df[["intercept" , independant_var]]).fit().summary()
+            with st.echo():
+                df["intercept"] = 1
+                result = sm.OLS(df[dependant_var] , df[["intercept" , independant_var]]).fit().summary()
             with open("slr.txt" , "w+") as f:
                 f.write(str(result))
             f = open("slr.txt").read()
@@ -64,3 +66,8 @@ if st.sidebar.checkbox("Simple linear regression" , False):
             st.warning("Please add .txt at the end of the name when you save file otherwise it will not work")
             href = f'<a href="data:file/txt;base64,{b64}">Download result.txt File</a> (click and save as &lt;some_name&gt;.txt)'
             st.markdown(href, unsafe_allow_html=True)
+            st.header("scatter plot")
+            plt.scatter( x= df[independant_var] , y=df[dependant_var] )
+            plt.xlabel("independant variable")
+            plt.ylabel("dependant variable")
+            st.pyplot()
