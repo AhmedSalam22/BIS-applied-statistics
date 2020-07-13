@@ -82,28 +82,35 @@ The reason for this is linear algebra. Specifically, in order to invert matrices
             """)
             dummy_variables = st.multiselect("Select your dummy variables" , list(df.columns))
             if st.checkbox("Convert into dummy variable" , False):
-                df_new = pd.get_dummies(df[dummy_variables])
-                df = df.join(df_new)
+                with st.echo():
+                    # code for convert categorical variable into  dummy 
+                    df_new = pd.get_dummies(df[dummy_variables])
+                    df = df.join(df_new)
                 st.success("Convert successfuly")
         # st.write(df)
         independant_var = st.multiselect("Choose independant (x-axis , explanatory) variable " , list(df.columns))
         dependant_var = st.selectbox("Choose dependant (y-axis , response) variable " , list(df.columns))
+        
+        if st.checkbox("Issue with Multi regression model" , False):
+            st.warning(" In Multi regression model x-variables just only realted to y variable and we assume there is no relationship between x-variable to another x-variable")
+            st.markdown(""" so we will graph the relationship between your selected variable to
+             make sure there is no relationship betwwen two indepentant variable if you see this kind or
+              relation then your model is incorrect and in this cause we can't use Multi regression model""")
+            with st.echo(code_location="below"):
+                # code we used to graph
+                sns.pairplot(df[independant_var])
+            st.pyplot()
+        
         if st.button("Calculate"):
             with st.echo():
                 df["intercept"] = 1
                 result = sm.OLS(df[dependant_var] , df[independant_var + ["intercept"]]).fit().summary()
             with open("slr.txt" , "w+") as f:
                 f.write(str(result))
+            st.text(result)
             f = open("slr.txt").read()
             b64 = base64.b64encode(f.encode()).decode()  # some strings <-> bytes conversions necessary here
             st.warning("Please add .txt at the end of the name when you save file otherwise it will not work")
             href = f'<a href="data:file/txt;base64,{b64}">Download result.txt File</a> (click and save as &lt;some_name&gt;.txt)'
             st.markdown(href, unsafe_allow_html=True)
-            if len(dependant_var) == len(independant_var):
-                st.header("scatter plot")
-                plt.scatter( x= df[independant_var] , y=df[dependant_var] )
-                plt.xlabel("independant variable")
-                plt.ylabel("dependant variable")
-                st.pyplot()
-                st.markdown("#### Correlation coefficients: `{}` ".format(np.corrcoef( df[independant_var] ,df[dependant_var] )[-1][0]))
-
+      
