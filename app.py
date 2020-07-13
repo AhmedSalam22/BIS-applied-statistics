@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 import statsmodels.api as sm
 import base64
 import seaborn as sns
-
+from patsy import dmatrices
+from statsmodels.stats.outliers_influence import variance_inflation_factor
 
 st.title("Applied Statistics")
 
@@ -100,7 +101,16 @@ The reason for this is linear algebra. Specifically, in order to invert matrices
                 # code we used to graph
                 sns.pairplot(df[independant_var])
             st.pyplot()
-        
+            st.markdown("""
+                another way to do that using VIF (Variance inflation factor) if this indicator large than (>) 10
+                then we should exclude these x-variables from our model otherwise this will be unreliable model (inaccurate model)
+            """)
+  
+            y , x = dmatrices( " {y} ~  {x}".format(y=dependant_var , x = " + ".join(independant_var)) , df , return_type = "dataframe")
+            vif = pd.DataFrame()
+            vif["VIF Factor"] = [variance_inflation_factor(x.values , i) for i in range(x.shape[1])]
+            vif["features"] = x.columns
+            st.table(vif)
         if st.button("Calculate"):
             with st.echo():
                 df["intercept"] = 1
