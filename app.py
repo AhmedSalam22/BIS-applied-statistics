@@ -57,42 +57,55 @@ if hypothesis_testing:
             """.format(x=x))
 
 # Simple linear regression
-if st.sidebar.checkbox("linear regression" , False):
-    st.title("linear regression")
+if st.sidebar.checkbox("regression" , False):
+    linearOrLogistic = st.sidebar.radio("Type of regression" , ["linear regression","Logistic regression"])
+    st.title(linearOrLogistic)
     if file_uploader != None:
 
         if st.radio("Do you want to include the categorical variable into your consideration" , ["No" , "Yes"]) == "Yes":
-            st.warning("""
-            when you create dummy variables using 0, 1 encodings, you always need to drop one of the columns from the model to make sure your matrices are full rank (and that your solutions are reliable from Python).
+            if linearOrLogistic == "linear regression":
+                st.warning("""
+                when you create dummy variables using 0, 1 encodings, you always need to drop one of the columns from the model to make sure your matrices are full rank (and that your solutions are reliable from Python).
 
-The reason for this is linear algebra. Specifically, in order to invert matrices, a matrix must be full rank (that is, all the columns need to be linearly independent). Therefore, you need to drop one of the dummy columns, to create linearly independent columns (and a full rank matrix).
-            يعنى لو أنت عاوز تضع البيانات النصية فى عين الاعتبار ما تعمل اعمده من صفر ل واحد تمثل المتغير هيكون موجود ولا لاء
-            فى عمود هتحذفه اللى احنا هنقارن على اساسه لنفترض عندنا  بيانات مثل الشرق والغرب يبقى هنعمل عمودين كل عمود بيمثل وجود المتغير او لاء بقيمة صفر وواحد
-            بعد كده هنحذف عمود منهم اللى هو هنقارن على اساسة ..خلاصة القول ما تشغلش بالك بس حبيت اوضح الفكرة 
-           لما تيجى تضع البيانات النصية فى عين الاعتبار هتحدد الcolumn
-           الذى يحتوى على هذه البيانات وبعدين هتختار الاساس اللى هتقارن عليه واحد منهم لو معملتش كده يبقى النتيجة مش شغالة
-           الbase line ده 
-           هيكون هو نفسه ال intercept
-            
+    The reason for this is linear algebra. Specifically, in order to invert matrices, a matrix must be full rank (that is, all the columns need to be linearly independent). Therefore, you need to drop one of the dummy columns, to create linearly independent columns (and a full rank matrix).
+                يعنى لو أنت عاوز تضع البيانات النصية فى عين الاعتبار ما تعمل اعمده من صفر ل واحد تمثل المتغير هيكون موجود ولا لاء
+                فى عمود هتحذفه اللى احنا هنقارن على اساسه لنفترض عندنا  بيانات مثل الشرق والغرب يبقى هنعمل عمودين كل عمود بيمثل وجود المتغير او لاء بقيمة صفر وواحد
+                بعد كده هنحذف عمود منهم اللى هو هنقارن على اساسة ..خلاصة القول ما تشغلش بالك بس حبيت اوضح الفكرة 
+            لما تيجى تضع البيانات النصية فى عين الاعتبار هتحدد الcolumn
+            الذى يحتوى على هذه البيانات وبعدين هتختار الاساس اللى هتقارن عليه واحد منهم لو معملتش كده يبقى النتيجة مش شغالة
+            الbase line ده 
+            هيكون هو نفسه ال intercept
+                
            
             بالمختصر المفيد لازم تستبعد واحد من المتغيرات النصية  واللى  انت هتستبعده هو اللى انت  هتقارن على اساسه 
            وده لكل عمود يحتوى على عدد من البيانات وليكن عمود الفرع يحتوى على الفرع ا و ب و س 
            يبقى لازم نستبعد فرع فى المتغير المستقل والمتغير ده هو اللى بنقارن على اساسه وليكن س
            طيب لو عندى عمود بيتحوى على بيانات مثل الشركة ا و ب وعاوزين نقارن بيهم هما كمان نفس الوضع لازم نستبعد واحد واللى هنستبعده هو اللى بنقارن على اساسه 
 
-            """)
+                """)
             dummy_variables = st.multiselect("Select your dummy variables" , list(df.columns))
             if st.checkbox("Convert into dummy variable" , False):
                 with st.echo():
                     # code for convert categorical variable into  dummy 
-                    df_new = pd.get_dummies(df[dummy_variables])
-                    df = df.join(df_new)
-                st.success("Convert successfuly")
+                    try:
+                        df_new = pd.get_dummies(df[dummy_variables])
+                        df = df.join(df_new)    
+                        st.success("Convert successfuly")
+                        if st.checkbox("Do you Want to see a Sample" , False):
+                            st.write(df.sample(10))
+            
+                    except ValueError as identifier:
+                        st.error(identifier)
+                        st.error("Failed to convert")
+
+
+
         # st.write(df)
         independant_var = st.multiselect("Choose independant (x-axis , explanatory) variable " , list(df.columns))
         dependant_var = st.selectbox("Choose dependant (y-axis , response) variable " , list(df.columns))
-        
-        if st.checkbox("Issue with Multi regression model" , False):
+
+        # "Issue with Multi regression model"
+        if  linearOrLogistic == "linear regression"   and st.checkbox("Issue with Multi regression model" , False):
             st.warning(" In Multi regression model x-variables just only realted to y variable and we assume there is no relationship between x-variable to another x-variable")
             st.markdown(""" so we will graph the relationship between your selected variable to
              make sure there is no relationship betwwen two indepentant variable if you see this kind or
@@ -105,22 +118,31 @@ The reason for this is linear algebra. Specifically, in order to invert matrices
                 another way to do that using VIF (Variance inflation factor) if this indicator large than (>) 10
                 then we should exclude these x-variables from our model otherwise this will be unreliable model (inaccurate model)
             """)
-  
-            y , x = dmatrices( " {y} ~  {x}".format(y=dependant_var , x = " + ".join(independant_var)) , df , return_type = "dataframe")
-            vif = pd.DataFrame()
-            vif["VIF Factor"] = [variance_inflation_factor(x.values , i) for i in range(x.shape[1])]
-            vif["features"] = x.columns
+            with st.echo():
+                y , x = dmatrices( " {y} ~  {x}".format(y=dependant_var , x = " + ".join(independant_var)) , df , return_type = "dataframe")
+                vif = pd.DataFrame()
+                vif["VIF Factor"] = [variance_inflation_factor(x.values , i) for i in range(x.shape[1])]
+                vif["features"] = x.columns
             st.table(vif)
+
+
         if st.button("Calculate"):
             with st.echo():
                 df["intercept"] = 1
-                result = sm.OLS(df[dependant_var] , df[independant_var + ["intercept"]]).fit().summary()
-            with open("slr.txt" , "w+") as f:
+                if linearOrLogistic == "linear regression":
+                    result = sm.OLS(df[dependant_var] , df[independant_var + ["intercept"]]).fit().summary()
+                else:
+                    result = sm.Logit(df[dependant_var] , df[independant_var + ["intercept"]]).fit().summary2()
+
+            with open("lr.txt" , "w+") as f:
                 f.write(str(result))
             st.text(result)
-            f = open("slr.txt").read()
+            f = open("lr.txt").read()
             b64 = base64.b64encode(f.encode()).decode()  # some strings <-> bytes conversions necessary here
             st.warning("Please add .txt at the end of the name when you save file otherwise it will not work")
             href = f'<a href="data:file/txt;base64,{b64}">Download result.txt File</a> (click and save as &lt;some_name&gt;.txt)'
             st.markdown(href, unsafe_allow_html=True)
       
+
+
+st.markdown("### Copyright@Ahmed Maher Fouzy Mohamed Salam")
