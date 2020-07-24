@@ -1,17 +1,16 @@
                           Results: Logit
 ==================================================================
-Model:              Logit            Pseudo R-squared: 0.963      
-Dependent Variable: fraud            AIC:              48.4009    
-Date:               2020-07-14 15:51 BIC:              69.6460    
-No. Observations:   8793             Log-Likelihood:   -21.200    
-Df Model:           2                LL-Null:          -578.10    
-Df Residuals:       8790             LLR p-value:      1.3900e-242
+Model:              Logit            Pseudo R-squared: 0.955      
+Dependent Variable: fraud            AIC:              56.3613    
+Date:               2020-07-24 18:16 BIC:              70.5248    
+No. Observations:   8793             Log-Likelihood:   -26.181    
+Df Model:           1                LL-Null:          -578.10    
+Df Residuals:       8791             LLR p-value:      4.8529e-242
 Converged:          1.0000           Scale:            1.0000     
 No. Iterations:     16.0000                                       
 -------------------------------------------------------------------
                 Coef.   Std.Err.     z     P>|z|    [0.025   0.975]
 -------------------------------------------------------------------
-duration       -1.4637    0.2905  -5.0389  0.0000  -2.0331  -0.8944
-day_weekday     2.5465    0.9043   2.8160  0.0049   0.7741   4.3188
-intercept       9.8709    1.9438   5.0783  0.0000   6.0613  13.6806
+duration       -1.3404    0.2373  -5.6494  0.0000  -1.8055  -0.8754
+intercept      10.3827    1.7563   5.9117  0.0000   6.9404  13.8249
 ==================================================================

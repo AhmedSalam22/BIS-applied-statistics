@@ -117,7 +117,7 @@ if hypothesis_testing:
         if options == "Option 1" or options == "Option 6":
             with st.echo():
                 # probability of a statistic higher than observed
-                prob_more_extreme_high = (null_vals > obs_mean).mean()             
+                prob_more_extreme_high = (null_vals < obs_mean).mean()             
                 # probability a statistic is more extreme lower
                 prob_more_extreme_low = (x - (obs_mean - x) < null_vals).mean()
                 pval = prob_more_extreme_low + prob_more_extreme_high
