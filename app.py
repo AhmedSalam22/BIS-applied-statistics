@@ -24,6 +24,7 @@ if file_uploader != None:
     if st.checkbox("Show raw data" , False):
         st.write(df)
     
+    
 
 
 hypothesis_testing = st.sidebar.checkbox("Hypothesis Testing" , False)
@@ -55,8 +56,54 @@ if hypothesis_testing:
 
 
             """.format(x=x))
+    if options in ["Option 1" , "Option 2" , "Option 3"] and file_uploader != None:
+        controler = st.selectbox("Select the Controler group" , list(df.columns))
+    if st.button("Calculate"):
 
-# Simple linear regression
+        sampling_dist = []
+        my_bar = st.progress(0)
+        
+        with st.spinner(text='In progress...'):
+            for i in range(10000):
+                sample = df.sample(df.shape[0], replace = True)
+                sample_mean = sample[controler].mean()
+                sampling_dist.append(sample_mean)
+                my_bar.progress(i/10000)
+        
+     
+
+        null_vals = np.random.normal(x, np.std(sampling_dist), 10000)
+        plt.figure(figsize=[15,10])
+        plt.subplot(1,2,1)
+        plt.hist(sampling_dist)
+        plt.title("sampling distribution from bootsstraping")
+
+        plt.subplot(1,2,2)
+        plt.hist(null_vals)
+        plt.title("if we assume the null value is True then the distibution looks like")
+
+        obs_mean = df[controler].mean()
+
+        plt.axvline(x=obs_mean, color = 'red'); # where our sample mean falls on null dist
+        plt.axvline(x= x - (obs_mean - x), color = 'red'); # where our sample mean falls on null dist
+
+        st.pyplot()
+        obs_mean = df[controler].mean()
+
+        if options == "Option 1":
+            # probability of a statistic higher than observed
+            prob_more_extreme_high = (null_vals > obs_mean).mean()             
+            # probability a statistic is more extreme lower
+            prob_more_extreme_low = (x - (obs_mean - x) < null_vals).mean()
+            pval = prob_more_extreme_low + prob_more_extreme_high
+            st.markdown("Pval =  `{}`".format(pval))
+        elif options == "Option 3":
+            pval = (null_vals > obs_mean).mean()
+            st.markdown("Pval =  `{}`".format(pval))
+        elif options == "Option 2":
+            pval = (null_vals < obs_mean).mean()
+            st.markdown("Pval =  `{}`".format(pval))
+# regression
 if st.sidebar.checkbox("regression" , False):
     linearOrLogistic = st.sidebar.radio("Type of regression" , ["linear regression","Logistic regression"])
     st.title(linearOrLogistic)
@@ -143,6 +190,10 @@ if st.sidebar.checkbox("regression" , False):
             href = f'<a href="data:file/txt;base64,{b64}">Download result.txt File</a> (click and save as &lt;some_name&gt;.txt)'
             st.markdown(href, unsafe_allow_html=True)
       
-
+        if linearOrLogistic == "Logistic regression":
+            if st.checkbox("How you can interpret result from Logistic regression" , False):
+                st.markdown("""
+                First, you need exponantial this variable  on your calculator you will see  : e ^ variable 
+                """)
 
 st.markdown("### Copyright@Ahmed Maher Fouzy Mohamed Salam")
